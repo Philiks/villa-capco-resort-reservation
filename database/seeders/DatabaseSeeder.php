@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        // TODO: Create UserSeeder and AdminSeeder.
     }
 }
