@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('name', 'first_name')->index('first_name');
             $table->string('last_name')->default('')->index('last_name');
-            $table->string('contact_number', User::CONTACT_NUMBER_LENGTH)->default('');
+            $table->string('contact_number', User::CONTACT_NUMBER_MAX_LENGTH)->default('');
             $table->boolean('is_admin')->default(false);
         });
     }
