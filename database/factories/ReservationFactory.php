@@ -19,9 +19,9 @@ class ReservationFactory extends Factory
     {
         return [
             'package_id' => Package::factory()->create(),
-            'no_of_people' => $faker->numberBetween(20, 30),
-            'amount_to_pay' => Format::moneyForDatabase($faker->numberBetween(6_000, 8_000)),
-            'reserved_date' => $faker->date(),
+            'no_of_people' => $this->faker->numberBetween(20, 30),
+            'amount_to_pay' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
+            'reserved_date' => $this->faker->date(),
         ];
     }
 }

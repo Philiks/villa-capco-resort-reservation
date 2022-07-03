@@ -17,8 +17,8 @@ class FaqFactory extends Factory
     public function definition()
     {
         return [
-            'question' => $faker->sentence($faker->numberBetween(8, 12)),
-            'answer' => $faker->realText(250),
+            'question' => $this->faker->sentence($this->faker->numberBetween(8, 12)),
+            'answer' => $this->faker->realText(250),
         ];
     }
 }

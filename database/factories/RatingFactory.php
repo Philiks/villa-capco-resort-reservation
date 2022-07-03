@@ -19,9 +19,9 @@ class RatingFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create(),
-            'comment' => $faker->realText(250),
-            'rating_score' => $faker->numberBetween(1, 5),
-            'is_featured' => $faker->boolean(),
+            'comment' => $this->faker->realText(250),
+            'rating_score' => $this->faker->numberBetween(1, 5),
+            'is_featured' => $this->faker->boolean(),
         ];
     }
 }
