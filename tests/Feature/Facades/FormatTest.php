@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Facades;
 
 use App\Facades\Format;
 use Tests\TestCase;
