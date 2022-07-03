@@ -13,6 +13,23 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * The regex for Philippine mobile numbers.
+     * The contact number MUST start with either '0' or '+63'
+     * then followed by '9' and suffixed by 9 numbers [0-9].
+     * @example
+     * 09123456789
+     * +639123456789
+     */
+    public const CONTACT_NUMBER_REGEX = "/^(\+63|0)9[0-9]{9}$/";
+
+    /**
+     *  The lengths of Philippine mobile numbers are either 11 or 13.
+     *  Mobile numbers with '0' prefix has 11 digits while mobile
+     *  numbers with '+63' prefix has 13.
+     */
+    public const CONTACT_NUMBER_MAX_LENGTH = 13;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
