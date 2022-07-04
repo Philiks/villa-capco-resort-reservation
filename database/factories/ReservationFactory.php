@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Facades\Format;
+use App\Models\Package;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
