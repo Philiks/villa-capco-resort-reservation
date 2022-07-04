@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Facades\Format;
+use App\Models\Addon;
 use Illuminate\Database\Seeder;
 
 class AddonSeeder extends Seeder
@@ -14,6 +15,14 @@ class AddonSeeder extends Seeder
      */
     public function run()
     {
-        // TODO: Create Addon seeder.
+        Addon::create([
+            'name' => 'Additional Person',
+            'rate' => Format::moneyForDatabase(100),
+        ]);
+
+        Addon::create([
+            'name' => 'Karaoke',
+            'rate' => Format::moneyForDatabase(250),
+        ]);
     }
 }
