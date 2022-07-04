@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->string('comment');
             $table->tinyInteger('rating_score');
-            $table->boolean('is_featured');
+            $table->boolean('is_featured')->default(false);
             $table->timestamps();
         });
     }
