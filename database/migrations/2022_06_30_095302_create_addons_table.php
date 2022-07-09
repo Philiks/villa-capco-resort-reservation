@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Package;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +16,12 @@ return new class extends Migration
     {
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Package::class)
+                ->default(0)
+                ->comment('0 means that this addon is for all of the packages.');
             $table->string('name')->index('addons');
             $table->integer('rate')
-                  ->comment('Divide by 100 to get the exact amount in decimal value.');
+                ->comment('Divide by 100 to get the exact amount in decimal value.');
             $table->timestamps();
         });
     }

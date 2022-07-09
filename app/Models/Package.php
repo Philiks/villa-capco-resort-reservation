@@ -36,6 +36,14 @@ class Package extends Model
     ];
 
     /**
+     * Get the Addons for the Package.
+     */
+    public function addons(): HasMany
+    {
+        return $this->hasMany(Addon::class);
+    }
+
+    /**
      * Get the Reservations for the Package.
      */
     public function reservations(): HasMany
