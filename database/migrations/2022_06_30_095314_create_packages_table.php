@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('rate')
                   ->comment('Divide by 100 to get the exact amount in decimal value.');
             $table->tinyInteger('max_people');
+            $table->string('details')->comment('In csv format.');
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();

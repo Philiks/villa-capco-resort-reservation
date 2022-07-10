@@ -21,6 +21,7 @@ class PackageFactory extends Factory
             'name' => $this->faker->sentence($this->faker->numberBetween(4, 6)),
             'rate' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
             'max_people' => $this->faker->numberBetween(20, 30),
+            'details' => $this->faker->sentence($this->faker->numberBetween(10, 15)),
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
         ];
