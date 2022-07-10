@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             FaqSeeder::class,
             PackageSeeder::class,
+            ImageSeeder::class,
             RatingSeeder::class,
             ReservationSeeder::class,
         ]);

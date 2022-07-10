@@ -44,6 +44,14 @@ class Package extends Model
     }
 
     /**
+     * Get the Images for the Package.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    /**
      * Get the Reservations for the Package.
      */
     public function reservations(): HasMany
