@@ -22,6 +22,7 @@ class ReservationFactory extends Factory
             'package_id' => Package::factory()->create(),
             'no_of_people' => $this->faker->numberBetween(20, 30),
             'amount_to_pay' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
+            'mode_of_payment' => 'cash',
             'reserved_date' => $this->faker->date(),
         ];
     }

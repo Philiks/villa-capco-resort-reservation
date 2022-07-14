@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Package;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +16,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('transaction_no');
             $table->foreignIdFor(Package::class);
+            $table->foreignIdFor(User::class);
             $table->tinyInteger('no_of_people');
             $table->integer('amount_to_pay')
                   ->comment('Divide by 100 to get the exact amount in decimal value.');
+            $table->string('mode_of_payment');
             $table->datetime('reserved_date');
+            $table->string('qr_code_path')
+                  ->nullable()
+                  ->comment('Qr Code will be made after the transaction_no has been created.');
+            $table->string('receipt_path')
+                  ->nullable()
+                  ->comment('Receipt will be made after the qr code has been created.');
             $table->timestamps();
         });
     }

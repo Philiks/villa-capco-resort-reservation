@@ -22,6 +22,7 @@ class ReservationSeeder extends Seeder
             'package_id' => 1,
             'no_of_people' => 20,
             'amount_to_pay' => Format::moneyForDatabase(10_000),
+            'mode_of_payment' => 'cash',
             'reserved_date' => Carbon::parse('2022-03-21'),
         ]);
 
@@ -30,6 +31,7 @@ class ReservationSeeder extends Seeder
             'no_of_people' => 28,
             // 13,000 + 3(100 per addt'l head)
             'amount_to_pay' => Format::moneyForDatabase(13_300),
+            'mode_of_payment' => 'cash',
             'reserved_date' => Carbon::parse('2022-03-21'),
         ])->addons()->attach(1, ['quantity' => 3]);
 
@@ -42,6 +44,7 @@ class ReservationSeeder extends Seeder
             'no_of_people' => 30,
             // 13,000 + 5(100 per addt'l head) + 250 karaoke
             'amount_to_pay' => Format::moneyForDatabase(13_750),
+            'mode_of_payment' => 'cash',
             'reserved_date' => Carbon::parse('2022-04-15'),
         ])->addons()->attach($addons);
 
@@ -49,6 +52,7 @@ class ReservationSeeder extends Seeder
             'package_id' => 3,
             'no_of_people' => 30,
             'amount_to_pay' => Format::moneyForDatabase(25_000),
+            'mode_of_payment' => 'cash',
             'reserved_date' => Carbon::parse('2022-02-13'),
         ]);
 
