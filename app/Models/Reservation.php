@@ -86,6 +86,14 @@ class Reservation extends Model
     }
 
     /**
+     * Get the Accommodation that owns the Reservation.
+     */
+    public function accommodation(): BelongsTo
+    {
+        return $this->belongsTo(Accommodation::class);
+    }
+
+    /**
      * Get the Package that owns the Reservation.
      */
     public function package(): BelongsTo

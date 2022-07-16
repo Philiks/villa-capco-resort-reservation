@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->index('package');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->string('name')->index('accommodation');
+            $table->string('details')->comment('In csv format.');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('accommodations');
     }
 };

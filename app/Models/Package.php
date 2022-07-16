@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Package extends Model
@@ -29,8 +30,6 @@ class Package extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'rate' => 'integer',
-        'max_people' => 'integer',
         'start_time' => 'datetime:h:i A',
         'end_time' => 'datetime:h:i A',
     ];
@@ -44,11 +43,11 @@ class Package extends Model
     }
 
     /**
-     * Get the Images for the Package.
+     * Accommodations that belong to the Package.
      */
-    public function images(): HasMany
+    public function accommodations(): BelongsToMany
     {
-        return $this->hasMany(Image::class);
+        return $this->belongsToMany(Accommodation::class);
     }
 
     /**

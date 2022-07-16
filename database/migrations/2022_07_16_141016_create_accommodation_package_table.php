@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Accommodation;
+use App\Models\Package;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->id();
+        Schema::create('accommodation_package', function (Blueprint $table) {
             $table->foreignIdFor(Accommodation::class);
-            $table->string('file_path');
+            $table->foreignIdFor(Package::class);
+            $table->integer('rate')
+                  ->comment('Divide by 100 to get the exact amount in decimal value.');
+            $table->tinyInteger('max_people');
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('accommodation_package');
     }
 };

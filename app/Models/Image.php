@@ -20,10 +20,10 @@ class Image extends Model
     ];
 
     /**
-     * Get the Package that owns the Addon.
+     * Get the Accommodation that owns the Addon.
      */
-    public function package(): BelongsTo
+    public function accommodation(): BelongsTo
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(Accommodation::class);
     }
 }

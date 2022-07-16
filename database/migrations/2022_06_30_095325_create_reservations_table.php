@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Accommodation;
 use App\Models\Package;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -17,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->uuid('transaction_no');
+            $table->foreignIdFor(Accommodation::class);
             $table->foreignIdFor(Package::class);
             $table->foreignIdFor(User::class);
             $table->tinyInteger('no_of_people');
