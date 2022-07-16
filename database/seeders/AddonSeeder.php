@@ -16,13 +16,11 @@ class AddonSeeder extends Seeder
     public function run()
     {
         Addon::create([
-            'package_id' => Addon::ADDON_FOR_ALL_PACKAGES,
             'name' => 'Additional Person',
             'rate' => Format::moneyForDatabase(100),
         ]);
 
         Addon::create([
-            'package_id' => Addon::ADDON_FOR_ALL_PACKAGES,
             'name' => 'Karaoke',
             'rate' => Format::moneyForDatabase(250),
         ]);
