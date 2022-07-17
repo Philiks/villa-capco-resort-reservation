@@ -18,7 +18,6 @@ class Package extends Model
      */
     protected $fillable = [
         'name',
-        'rate',
         'max_people',
         'start_time',
         'end_time',
