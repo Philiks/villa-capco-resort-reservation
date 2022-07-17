@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Package;
+use App\Models\Accommodation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     public function definition()
     {
         return [
-            'package_id' => Package::factory()->create(),
+            'accommodation_id' => Accommodation::inRandomOrder()->pluck('id')->first(),
             'file_path' => $this->faker->imageUrl(),
         ];
     }

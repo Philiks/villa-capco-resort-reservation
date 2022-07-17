@@ -19,7 +19,7 @@ class AddonFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->sentece($this->faker->numberBetween(4, 6)),
+            'name' => $this->faker->sentence($this->faker->numberBetween(4, 6)),
             'rate' => Format::moneyForDatabase($this->faker->numberBetween(200, 500)),
         ];
     }

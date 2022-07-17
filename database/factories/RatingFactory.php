@@ -18,7 +18,7 @@ class RatingFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory()->create(),
+            'user_id' => User::where('id', '!=', 1)->inRandomOrder()->pluck('id')->first(),
             'comment' => $this->faker->realText(250),
             'rating_score' => $this->faker->numberBetween(1, 5),
             'is_featured' => $this->faker->boolean(),

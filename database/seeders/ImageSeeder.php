@@ -16,9 +16,83 @@ class ImageSeeder extends Seeder
     public function run()
     {
         Image::create([
-            'package_id' => 1,
-            'file_path' => asset('storage/images/no-thumbnail.png')
+            'accommodation_id' => 1,
+            'file_path' => asset('storage/images/accommodations/pool 1.png')
         ]);
-        // TODO: Create real data based on the pictures passed in google docs.
+
+        Image::create([
+            'accommodation_id' => 1,
+            'file_path' => asset('storage/images/accommodations/pool 1 - room 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 2,
+            'file_path' => asset('storage/images/accommodations/pool 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 2,
+            'file_path' => asset('storage/images/accommodations/pool 2 - room 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 2,
+            'file_path' => asset('storage/images/accommodations/pool 2 - room 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 3,
+            'file_path' => asset('storage/images/accommodations/pool 3 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 3,
+            'file_path' => asset('storage/images/accommodations/pool 3 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 3,
+            'file_path' => asset('storage/images/accommodations/pool 3 - room 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 3,
+            'file_path' => asset('storage/images/accommodations/pool 3 - room 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 4,
+            'file_path' => asset('storage/images/accommodations/pool 4.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 4,
+            'file_path' => asset('storage/images/accommodations/pool 4 - room 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 4,
+            'file_path' => asset('storage/images/accommodations/pool 4 - room 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 4,
+            'file_path' => asset('storage/images/accommodations/pool 4 - room 3.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 5,
+            'file_path' => asset('storage/images/accommodations/function hall 1.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 5,
+            'file_path' => asset('storage/images/accommodations/function hall 2.png')
+        ]);
+
+        Image::create([
+            'accommodation_id' => 5,
+            'file_path' => asset('storage/images/accommodations/function hall 3.png')
+        ]);
     }
 }
