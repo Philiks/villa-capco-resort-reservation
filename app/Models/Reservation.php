@@ -47,8 +47,8 @@ class Reservation extends Model
         /**
          * Create the primary key UUID.
          */
-        static::creating(function ($post) {
-            $post->{$post->getKeyName()} = Str::uuid()->toString();
+        static::creating(function ($reservations) {
+            $reservations->{$reservations->getKeyName()} = Str::uuid()->toString();
         });
     }
 
