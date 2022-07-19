@@ -20,9 +20,14 @@ class ReservationFactory extends Factory
      */
     public function definition()
     {
+        $accommodation_id = Accommodation::inRandomOrder()->pluck('id')->first();
+        $package_id = $accommodation_id == 5 ? /* Function Hall */
+            1 : /* It is only available in the morning. */
+            $this->faker->numberBetween(1, Package::count());
+
         return [
-            'accommodation_id' => Accommodation::inRandomOrder()->pluck('id')->first(),
-            'package_id' => Package::inRandomOrder()->pluck('id')->first(),
+            'accommodation_id' => $accommodation_id,
+            'package_id' => $package_id,
             'user_id' => User::where('id', '!=', 1)->inRandomOrder()->pluck('id')->first(),
             'no_of_people' => $this->faker->numberBetween(20, 30),
             'amount_to_pay' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
