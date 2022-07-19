@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Events\ReservationCreated;
 use App\Facades\Format;
 use App\Models\Accommodation;
 use App\Models\Addon;
-use App\Models\Package;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class ReservationSeeder extends Seeder
 {
@@ -66,20 +67,19 @@ class ReservationSeeder extends Seeder
         ]);
 
         $reservations = Reservation::factory()
-                            ->count(45)
+                            ->count(46)
                             ->create();
         $additional_people_addon_rate = Addon::find(1)->pluck('rate')->first();
         $karaoke_addon_rate = Addon::find(2)->pluck('rate')->first();
         foreach ($reservations as $reservation) {
             // 1. Setup relationships.
-            $accommodation = Accommodation::inRandomOrder()->first();
-            $package = $accommodation->id == 5 ? /* Function Hall */
-                Package::find(1) : /* It is only available in the morning. */
-                Package::inRandomOrder()->first();
-            $pivot = $accommodation->packages()->wherePivot('package_id', $package->id)->first();
+            $package = Accommodation::find($reservation->accommodation_id)
+                                    ->packages()
+                                    ->wherePivot('package_id', $reservation->package_id)
+                                    ->first();
 
             // 2. Check if $reservation exceeds the $pivot->max_people.
-            $max_people = $pivot->pivot->max_people;
+            $max_people = $package->pivot->max_people;
             $no_of_people = $reservation->no_of_people;
             $additional_head = max($no_of_people - $max_people, 0);
 
@@ -95,13 +95,13 @@ class ReservationSeeder extends Seeder
             if ($additional_head == 0) unset($addons[1]);
 
             // Some do not add 'karaoke' in their reservation.
-            if ($addons[2] == 0) {
+            if ($addons[2]['quantity'] == 0) {
                 unset($addons[2]);
                 $karaoke_addon_rate = 0;
             }
 
             // 4. Compute amount to pay.
-            $amount_to_pay = $pivot->pivot->rate
+            $amount_to_pay = $package->pivot->rate
                 + ($additional_people_addon_rate * $additional_head)
                 + $karaoke_addon_rate;
 
@@ -115,7 +115,20 @@ class ReservationSeeder extends Seeder
             ]);
         }
 
-        // TODO: Qr Code Images.
-        // TODO: Receipt Images.
+        // Delete existing Qr Codes and Receipts in
+        // `storage/images/receipts` prior to this seed.
+        Storage::deleteDirectory('public/images/qr_codes');
+        Storage::deleteDirectory('public/images/receipts');
+        // Upload Qr Codes and receipts to 'storage/images/receipts`
+        // and 'storage/images/receipts`, respectively.
+        Reservation::all()->each(function ($item, $key) {
+            $qr_code_path = asset("storage/images/qr_codes/{$item->transaction_no}.png");
+            $receipt_path = asset("storage/images/receipts/{$item->transaction_no}.pdf");
+            $item->update([
+                'qr_code_path' => $qr_code_path,
+                'receipt_path' => $receipt_path,
+            ]);
+            event(new ReservationCreated($item));
+        });
     }
 }
