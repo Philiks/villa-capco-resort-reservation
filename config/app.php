@@ -199,6 +199,7 @@ return [
          * User-Defined Service Providers...
          */
         App\Providers\FormatServiceProvider::class,
+        App\Providers\ReceiptServiceProvider::class,
     ],
 
     /*
