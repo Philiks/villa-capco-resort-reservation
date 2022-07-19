@@ -82,7 +82,9 @@ class Reservation extends Model
      */
     public function addons(): BelongsToMany
     {
-        return $this->belongsToMany(Addon::class);
+        return $this->belongsToMany(Addon::class)
+            ->withTimestamps()
+            ->withPivot(['quantity']);
     }
 
     /**
