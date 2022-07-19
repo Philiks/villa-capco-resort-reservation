@@ -77,4 +77,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+    
+    /**
+     * Returns the full name of the authenticated user in the format:
+     * last_name, first_name
+     * @return string fullname Full name of the user.
+     */
+    public function getFullname(): string
+    {
+        return "{$this->last_name}, {$this->first_name}";
+    }
 }
