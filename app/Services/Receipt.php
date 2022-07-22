@@ -18,11 +18,11 @@ class Receipt
      */
     public function generateQrCode(string $transaction_no): void {
         $qr_code_path = $this->getQrCodeFilepathFor($transaction_no);
-        $receipt_path = $this->getReceiptFilepathFor($transaction_no);
+        $receipt_path = env('APP_URL') . '/storage/' . $this->getReceiptFilepathFor($transaction_no);
         
         $url = "https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl={$receipt_path}";
         $content = file_get_contents($url);
-        Storage::put($qr_code_path, $content);
+        Storage::disk('public')->put($qr_code_path, $content);
     }
 
     /**
@@ -71,7 +71,7 @@ class Receipt
         
         $pdf = Pdf::loadView('pdf.receipt', compact("receipt"));
         $receipt_path = $this->getReceiptFilepathFor($reservation->transaction_no);
-        Storage::put($receipt_path, $pdf->output());
+        Storage::disk('public')->put($receipt_path, $pdf->output());
     }
 
     /**

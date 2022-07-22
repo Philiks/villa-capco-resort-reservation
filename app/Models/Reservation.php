@@ -17,14 +17,14 @@ class Reservation extends Model
      * 
      * @var string
      */
-    public const QR_CODE_PATH = "public/images/qr_codes/";
+    public const QR_CODE_PATH = "images/qr_codes/";
 
     /**
      * The public path of receipt.
      * 
      * @var string
      */
-    public const RECEIPT_PATH = "public/images/receipts/";
+    public const RECEIPT_PATH = "images/receipts/";
 
     /**
      * The primary key for the model.
