@@ -124,4 +124,48 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Returns the full path of the qr code given its transaction_no.\
+     * This path is used for saving the file using the `Storage::put()`.
+     * 
+     * @param string $transaction_no Name of the file.
+     * @return string full path of the qr code.
+     */
+    public static function getQrCodePublicPathFor(string $transaction_no): string {
+        return 'public/' . Reservation::QR_CODE_PATH . $transaction_no . '.png';
+    }
+
+    /**
+     * Returns the full path of the receipt given its transaction_no.\
+     * This path is used for saving the file using the `Storage::put()`.
+     * 
+     * @param string $transaction_no Name of the file.
+     * @return string full path of the receipt.
+     */
+    public static function getReceiptPublicPathFor(string $transaction_no): string {
+        return 'public/' . Reservation::RECEIPT_PATH . $transaction_no . '.pdf';
+    }
+
+    /**
+     * Returns the server path of the qr code given its transaction_no.\
+     * This path is used to save the `asset()` path of the transaction in the database.
+     * 
+     * @param string $transaction_no Name of the file.
+     * @return string server path of the qr code.
+     */
+    public static function getQrCodeServerPathFor(string $transaction_no): string {
+        return asset('storage/' . Reservation::QR_CODE_PATH . $transaction_no . '.png');
+    }
+
+    /**
+     * Returns the full path of the receipt given its transaction_no.\
+     * This path is used to save the `asset()` path of the transaction in the database.
+     * 
+     * @param string $transaction_no Name of the file.
+     * @return string server path of the receipt.
+     */
+    public static function getReceiptServerPathFor(string $transaction_no): string {
+        return asset('storage/' . Reservation::RECEIPT_PATH . $transaction_no . '.pdf');
+    }
 }

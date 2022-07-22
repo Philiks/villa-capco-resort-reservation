@@ -118,13 +118,13 @@ class ReservationSeeder extends Seeder
 
         // Delete existing Qr Codes and Receipts in
         // `storage/images/receipts` prior to this seed.
-        Storage::deleteDirectory(Reservation::QR_CODE_PATH);
-        Storage::deleteDirectory(Reservation::RECEIPT_PATH);
+        Storage::disk('public')->deleteDirectory(Reservation::QR_CODE_PATH);
+        Storage::disk('public')->deleteDirectory(Reservation::RECEIPT_PATH);
         // Upload Qr Codes and receipts to 'storage/images/receipts`
         // and 'storage/images/receipts`, respectively.
         Reservation::all()->each(function ($item, $key) {
-            $qr_code_path = Receipt::getQrCodeFilepathFor($item->transaction_no);
-            $receipt_path = Receipt::getReceiptFilepathFor($item->transaction_no);
+            $qr_code_path = Reservation::getQrCodeServerPathFor($item->transaction_no);
+            $receipt_path = Reservation::getReceiptServerPathFor($item->transaction_no);
             $item->update([
                 'qr_code_path' => $qr_code_path,
                 'receipt_path' => $receipt_path,

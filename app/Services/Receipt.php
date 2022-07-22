@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Storage;
 class Receipt
 {
     /**
-     * Generate Qr Code that links to the url of the receipt.
+     * Generate Qr Code that links to the url of the receipt.\
      * The Qr Code will be located at images/qr_codes/<transaction_no>.png
      * 
-     * @param string $transaction_no
+     * @param string $transaction_no The primary key of the `Reservation` model.
      */
     public function generateQrCode(string $transaction_no): void {
-        $qr_code_path = $this->getQrCodeFilepathFor($transaction_no);
-        $receipt_path = env('APP_URL') . '/storage/' . $this->getReceiptFilepathFor($transaction_no);
+        $qr_code_path = Reservation::getQrCodePublicPathFor($transaction_no);
+        $receipt_path = Reservation::getReceiptServerPathFor($transaction_no);
         
         $url = "https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl={$receipt_path}";
         $content = file_get_contents($url);
-        Storage::disk('public')->put($qr_code_path, $content);
+        Storage::put($qr_code_path, $content);
     }
 
     /**
-     * Generate/update Receipt using the instance of the Reservation.
-     * Receipt should be updated once a change in reservation record occurs.
-     * Qr code should not be updated as it only points to the link of the receipt.
+     * Generate/update Receipt using the instance of the Reservation.\
+     * Receipt should be updated once a change in reservation record occurs.\
+     * Qr code should not be updated as it only points to the link of the receipt.\
      * The Receipt will be located at images/receipts/<transaction_no>.png
      * 
-     * @param \App\Models\Reservation $reservation
+     * @param \App\Models\Reservation $reservation The model instance of `Reservation`.
      */
     public function generateReceipt(Reservation $reservation): void {
         $user = User::find($reservation->user_id);
@@ -70,39 +70,19 @@ class Receipt
         ];
         
         $pdf = Pdf::loadView('pdf.receipt', compact("receipt"));
-        $receipt_path = $this->getReceiptFilepathFor($reservation->transaction_no);
-        Storage::disk('public')->put($receipt_path, $pdf->output());
+        $receipt_path = Reservation::getReceiptPublicPathFor($reservation->transaction_no);
+        Storage::put($receipt_path, $pdf->output());
     }
 
     /**
-     * Deletes the qr code and receipt from the storage folder.
+     * Deletes the qr code and receipt from the storage folder.\
      * This must comes after the deletion of the record in the database.
      * 
-     * @param string $transaction_no - Name of the file.
+     * @param string $transaction_no Name of the file.
      */
     public function deleteQrCodeAndReceipt(string $transaction_no): void {
-        $qr_code_path = $this->getQrCodeFilepathFor($transaction_no);
-        $receipt_path = $this->getReceiptFilepathFor($transaction_no);
+        $qr_code_path = Reservation::getQrCodePublicPathFor($transaction_no);
+        $receipt_path = Reservation::getReceiptPublicPathFor($transaction_no);
         Storage::delete([$qr_code_path, $receipt_path]);
-    }
-
-    /**
-     * Returns the full path of the qr code given its transaction_no.
-     * 
-     * @param string $transaction_no - Name of the file.
-     * @return string full path of the qr code.
-     */
-    public function getQrCodeFilepathFor(string $transaction_no): string {
-        return Reservation::QR_CODE_PATH . $transaction_no . ".png";
-    }
-
-    /**
-     * Returns the full path of the receipt given its transaction_no.
-     * 
-     * @param string $transaction_no - Name of the file.
-     * @return string full path of the receipt.
-     */
-    public function getReceiptFilepathFor(string $transaction_no): string {
-        return Reservation::RECEIPT_PATH . $transaction_no . ".pdf";
     }
 }
