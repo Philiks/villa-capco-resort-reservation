@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static void generateQrCode(string $transaction_no)
  * @method static void generateReceipt(Reservation $reservation)
  * @method static void deleteQrCodeAndReceipt(string $transaction_no)
+ * @method static string getQrCodeFilepathFor(string $transaction_no)
+ * @method static string getReceiptFilepathFor(string $transaction_no)
  * 
  * @see \App\Services\Receipt
  */

@@ -13,6 +13,20 @@ class Reservation extends Model
     use HasFactory;
 
     /**
+     * The public path of qr code.
+     * 
+     * @var string
+     */
+    public const QR_CODE_PATH = "public/images/qr_codes/";
+
+    /**
+     * The public path of receipt.
+     * 
+     * @var string
+     */
+    public const RECEIPT_PATH = "public/images/receipts/";
+
+    /**
      * The primary key for the model.
      *
      * @var string

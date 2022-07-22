@@ -17,8 +17,8 @@ class Receipt
      * @param string $transaction_no
      */
     public function generateQrCode(string $transaction_no): void {
-        $qr_code_path = "public/images/qr_codes/{$transaction_no}.png";
-        $receipt_path = asset("storage/images/receipts/{$transaction_no}.pdf");
+        $qr_code_path = $this->getQrCodeFilepathFor($transaction_no);
+        $receipt_path = $this->getReceiptFilepathFor($transaction_no);
         
         $url = "https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl={$receipt_path}";
         $content = file_get_contents($url);
@@ -70,7 +70,7 @@ class Receipt
         ];
         
         $pdf = Pdf::loadView('pdf.receipt', compact("receipt"));
-        $receipt_path = "public/images/receipts/{$reservation->transaction_no}.pdf";
+        $receipt_path = $this->getReceiptFilepathFor($reservation->transaction_no);
         Storage::put($receipt_path, $pdf->output());
     }
 
@@ -81,8 +81,28 @@ class Receipt
      * @param string $transaction_no - Name of the file.
      */
     public function deleteQrCodeAndReceipt(string $transaction_no): void {
-        $qr_code_path = "public/images/qr_codes/{$transaction_no}.png";
-        $receipt_path = "public/images/receipts/{$transaction_no}.pdf";
+        $qr_code_path = $this->getQrCodeFilepathFor($transaction_no);
+        $receipt_path = $this->getReceiptFilepathFor($transaction_no);
         Storage::delete([$qr_code_path, $receipt_path]);
+    }
+
+    /**
+     * Returns the full path of the qr code given its transaction_no.
+     * 
+     * @param string $transaction_no - Name of the file.
+     * @return string full path of the qr code.
+     */
+    public function getQrCodeFilepathFor(string $transaction_no): string {
+        return Reservation::QR_CODE_PATH . $transaction_no . ".png";
+    }
+
+    /**
+     * Returns the full path of the receipt given its transaction_no.
+     * 
+     * @param string $transaction_no - Name of the file.
+     * @return string full path of the receipt.
+     */
+    public function getReceiptFilepathFor(string $transaction_no): string {
+        return Reservation::RECEIPT_PATH . $transaction_no . ".pdf";
     }
 }
