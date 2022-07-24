@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Facades\Format;
 use App\Models\Accommodation;
 use App\Models\Reservation;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\Storage;
 
 class Receipt
@@ -17,12 +18,12 @@ class Receipt
      * @param string $transaction_no The primary key of the `Reservation` model.
      */
     public function generateQrCode(string $transaction_no): void {
-        $qr_code_path = Reservation::getQrCodePublicPathFor($transaction_no);
-        $receipt_path = Reservation::getReceiptServerPathFor($transaction_no);
+        $qr_code_path = Reservation::getQrCodeFilepathFor($transaction_no);
+        $receipt_path = asset('storage/' . Reservation::getReceiptFilepathFor($transaction_no));
         
         $url = "https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl={$receipt_path}";
         $content = file_get_contents($url);
-        Storage::put($qr_code_path, $content);
+        Storage::disk('public')->put($qr_code_path, $content);
     }
 
     /**
@@ -44,34 +45,35 @@ class Receipt
                     ->get()
                     ->map(fn ($item, $key) => [
                         'name' => $item->name,
-                        'rate' => $item->rate,
+                        'rate' => Format::moneyForDisplay($item->rate),
                         'quantity' => $item->pivot->quantity,
-                        'subtotal' => $item->pivot->quantity * $item->rate
+                        'subtotal' => Format::moneyForDisplay($item->pivot->quantity * $item->rate)
                     ])
                     ->toArray();
 
         $receipt = [
             'transaction_no' => $reservation->transaction_no,
-            'qr_code_path' => $reservation->qr_code_path,
+            // DomPdf requires the absolute path of the file.
+            'qr_code_path' => public_path('storage/' . $reservation->qr_code_path),
             'user_fullname' => $user->getFullname(),
             'user_contact_no' => $user->contact_number,
             'user_email' => $user->email,
             'no_of_people' => $reservation->no_of_people,
-            'reserved_date' => $reservation->reserved_date,
-            'start_time' => $package->start_time,
-            'end_time' => $package->end_time,
+            'reserved_date' => date('D F j, Y', strtotime($reservation->reserved_date)),
+            'start_time' => date('h:i A', strtotime($package->start_time)),
+            'end_time' => date('h:i A', strtotime($package->end_time)),
             'mode_of_payment' => $reservation->mode_of_payment,
             'accommodation' => $accommodation->name,
             'package' => $package->name,
-            'rate' => $package->pivot->rate,
+            'rate' => Format::moneyForDisplay($package->pivot->rate),
             'max_people' => $package->pivot->max_people,
             'addons' => $addons,
-            'amount_to_pay' => $reservation->amount_to_pay,
+            'amount_to_pay' => Format::moneyForDisplay($reservation->amount_to_pay),
         ];
         
-        $pdf = Pdf::loadView('pdf.receipt', compact("receipt"));
-        $receipt_path = Reservation::getReceiptPublicPathFor($reservation->transaction_no);
-        Storage::put($receipt_path, $pdf->output());
+        $pdf = SnappyPdf::loadView('pdf.receipt', compact("receipt"));
+        $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
+        Storage::disk('public')->put($receipt_path, $pdf->setPaper('a5')->output());
     }
 
     /**
@@ -81,8 +83,8 @@ class Receipt
      * @param string $transaction_no Name of the file.
      */
     public function deleteQrCodeAndReceipt(string $transaction_no): void {
-        $qr_code_path = Reservation::getQrCodePublicPathFor($transaction_no);
-        $receipt_path = Reservation::getReceiptPublicPathFor($transaction_no);
-        Storage::delete([$qr_code_path, $receipt_path]);
+        $qr_code_path = Reservation::getQrCodeFilepathFor($transaction_no);
+        $receipt_path = Reservation::getReceiptFilepathFor($transaction_no);
+        Storage::disk('public')->delete([$qr_code_path, $receipt_path]);
     }
 }
