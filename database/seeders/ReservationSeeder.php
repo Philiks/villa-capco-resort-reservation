@@ -95,16 +95,19 @@ class ReservationSeeder extends Seeder
             // since $additional_head is 0 so their product will be 0 regardless.
             if ($additional_head == 0) unset($addons[1]);
 
+            // Store the original $karaoke_addon_rate to new variable
+            // so the next iteration won't be affected.
+            $new_karaoke_addon_rate = $karaoke_addon_rate;
             // Some do not add 'karaoke' in their reservation.
             if ($addons[2]['quantity'] == 0) {
                 unset($addons[2]);
-                $karaoke_addon_rate = 0;
+                $new_karaoke_addon_rate = 0;
             }
 
             // 4. Compute amount to pay.
             $amount_to_pay = $package->pivot->rate
                 + ($additional_people_addon_rate * $additional_head)
-                + $karaoke_addon_rate;
+                + $new_karaoke_addon_rate;
 
             // 5. Attach $addons if the array haven't unset every element.
             if ($addons != null) $reservation->addons()->attach($addons);
@@ -123,8 +126,8 @@ class ReservationSeeder extends Seeder
         // Upload Qr Codes and receipts to 'storage/images/receipts`
         // and 'storage/images/receipts`, respectively.
         Reservation::all()->each(function ($item, $key) {
-            $qr_code_path = Reservation::getQrCodeServerPathFor($item->transaction_no);
-            $receipt_path = Reservation::getReceiptServerPathFor($item->transaction_no);
+            $qr_code_path = Reservation::getQrCodeFilepathFor($item->transaction_no);
+            $receipt_path = Reservation::getReceiptFilepathFor($item->transaction_no);
             $item->update([
                 'qr_code_path' => $qr_code_path,
                 'receipt_path' => $receipt_path,
