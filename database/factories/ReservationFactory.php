@@ -31,7 +31,7 @@ class ReservationFactory extends Factory
             'user_id' => User::where('id', '!=', 1)->inRandomOrder()->pluck('id')->first(),
             'no_of_people' => $this->faker->numberBetween(20, 30),
             'amount_to_pay' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
-            'mode_of_payment' => 'cash',
+            'mode_of_payment' => 'Cash',
             'reserved_date' => $this->faker->date(),
         ];
     }
