@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-no-nav-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">

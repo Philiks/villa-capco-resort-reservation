@@ -1,5 +1,9 @@
 <?php
 
+use App\Facades\Receipt;
+use App\Models\Accommodation;
+use App\Models\Reservation;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/accommodations', function () {
+    $accommodations = Accommodation::all();
+    return view('app.accommodations', compact("accommodations"));
+})->name('app.accommodations');
+
+Route::get('/facilities', function () {
+    $accommodations = Accommodation::all();
+    return view('app.accommodations', compact("accommodations"));
+})->name('app.facilities');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
+// TODO: To be removed. User will go back to '/' after logging in. 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
