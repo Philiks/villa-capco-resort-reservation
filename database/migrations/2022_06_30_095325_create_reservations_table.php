@@ -2,6 +2,7 @@
 
 use App\Models\Accommodation;
 use App\Models\Package;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Accommodation::class);
             $table->foreignIdFor(Package::class);
             $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Status::class);
             $table->tinyInteger('no_of_people');
             $table->integer('amount_to_pay')
                   ->comment('Divide by 100 to get the exact amount in decimal value.');

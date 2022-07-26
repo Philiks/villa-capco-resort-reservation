@@ -126,6 +126,14 @@ class Reservation extends Model
     }
 
     /**
+     * Get the Status that owns the Reservation.
+     */
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    /**
      * Returns the path of the qr code given its transaction_no.\
      * This path is use to get the directory and file name of the qr code.\
      * This is also the path to be saved in the database.
