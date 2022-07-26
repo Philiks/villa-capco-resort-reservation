@@ -17,7 +17,9 @@ class Addon extends Model
      */
     protected $fillable = [
         'name',
+        'description',
         'rate',
+        'image_path'
     ];
 
     /**

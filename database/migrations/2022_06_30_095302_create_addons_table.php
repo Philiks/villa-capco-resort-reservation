@@ -17,8 +17,10 @@ return new class extends Migration
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index('addons');
+            $table->string('description');
             $table->integer('rate')
                 ->comment('Divide by 100 to get the exact amount in decimal value.');
+            $table->string('image_path');
             $table->timestamps();
         });
     }
