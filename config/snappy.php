@@ -35,17 +35,25 @@ return [
     
     'pdf' => [
         'enabled' => true,
-        'binary' => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        // Uncomment below if the OS is linux-based.
+        // 'binary' => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        // Uncomment below if the OS is windows.
+        // Note: Be sure to install the `wkhtmltopdf` from https://wkhtmltopdf.org/downloads.html.
+        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf"',
         'timeout' => false,
-        'options' => [],
+        'options' => ['enable-local-file-access' => true],
         'env'     => [],
     ],
     
     'image' => [
         'enabled' => true,
-        'binary' => base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'),
+        // Uncomment below if the OS is linux-based.
+        // 'binary' => base_path('vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64'),
+        // Uncomment below if the OS is windows.
+        // Note: Be sure to install the `wkhtmltopdf` from https://wkhtmltopdf.org/downloads.html.
+        'binary' => '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage"',
         'timeout' => false,
-        'options' => [],
+        'options' => ['enable-local-file-access' => true],
         'env'     => [],
     ],
 

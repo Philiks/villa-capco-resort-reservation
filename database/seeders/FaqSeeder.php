@@ -26,7 +26,7 @@ class FaqSeeder extends Seeder
 
         Faq::create([
             'question' => "Does Villa Capco has Facebook Page?",
-            'answer' => "Yes, you can visit our Facebook Page at https://www.facebook.com/villacapco",
+            'answer' => "Yes, you can visit our Facebook Page at <a href=\"https://www.facebook.com/villacapco\">https://www.facebook.com/villacapco</a>",
         ]);
 
         Faq::create([

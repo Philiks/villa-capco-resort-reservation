@@ -41,7 +41,7 @@ class ReservationSeeder extends Seeder
             'amount_to_pay' => Format::moneyForDatabase(13_300),
             'mode_of_payment' => 'cash',
             'reserved_date' => Carbon::parse('2022-03-21'),
-        ])->addons()->attach(1, ['quantity' => 3]);
+        ])->addons()->attach(4, ['quantity' => 3]);
 
         $addons = [
             3 => /* karaoke */ ['quantity' => 1],
@@ -74,41 +74,8 @@ class ReservationSeeder extends Seeder
                             ->count(46)
                             ->create();
 
-        foreach ($reservations as $reservation) {
-            // 1. Setup relationships.
-            $package = Accommodation::find($reservation->accommodation_id)
-                                    ->packages()
-                                    ->wherePivot('package_id', $reservation->package_id)
-                                    ->first();
-
-            // 2. Check if $reservation exceeds the $pivot->max_people.
-            $max_people = $package->pivot->max_people;
-            $no_of_people = $reservation->no_of_people;
-            $additional_head = max($no_of_people - $max_people, 0);
-
-            // 3. Assign addons. Check if they should be added (quantity != 0) or not (unset from array).
-            $addons_quantities = Addon::all()->mapWithKeys(fn ($item) => [
-                $item['id'] => [ 
-                    'quantity' => $item['name'] == "Additional Person" ? $additional_head : rand(0, 1),
-                    'rate' => $item['rate'],
-                ]
-            ])->filter(fn ($value) => $value > 0);
-
-            // 4 Compute for the accumulated addons rate and the package's rate.
-            $amount_to_pay = $addons_quantities
-                ->reduce(fn ($carry, $current) => $carry + $current['quantity'] * $current['rate'],
-                    $package->pivot->rate /* The initial value is the package's rate. */);
-
-            // 5. Convert the collection to array and attach to the reservation if it is not empty.
-            $addons_quantities = $addons_quantities->map(fn ($item) => [ 'quantity' => $item['quantity'] ])->toArray();
-            if ($addons != null) $reservation->addons()->attach($addons);
-            
-            // 6. Update the $resrvation row.
-            $reservation->update([
-                'no_of_people' => $no_of_people,
-                'amount_to_pay' => $amount_to_pay,
-            ]);
-        }
+        foreach ($reservations as $reservation)
+            $this->updateReservation($reservation);
 
         // Delete existing Qr Codes and Receipts in
         // `storage/images/receipts` prior to this seed.
@@ -125,5 +92,42 @@ class ReservationSeeder extends Seeder
             ]);
             event(new ReservationCreated($item));
         });
+    }
+
+    private function updateReservation($reservation)
+    {
+        // 1. Setup relationships.
+        $package = Accommodation::find($reservation->accommodation_id)
+                                ->packages()
+                                ->wherePivot('package_id', $reservation->package_id)
+                                ->first();
+
+        // 2. Check if $reservation exceeds the $pivot->max_people.
+        $max_people = $package->pivot->max_people;
+        $no_of_people = $reservation->no_of_people;
+        $additional_head = max($no_of_people - $max_people, 0);
+
+        // 3. Assign addons. Check if they should be added (quantity != 0) or not (unset from array).
+        $addons_quantities = Addon::all()->mapWithKeys(fn ($item) => [
+            $item['id'] => [ 
+                'quantity' => $item['name'] == "Additional Person" ? $additional_head : rand(0, 1),
+                'rate' => $item['rate'],
+            ]
+        ])->filter(fn ($value) => $value['quantity'] > 0);
+
+        // 4 Compute for the accumulated addons rate and the package's rate.
+        $amount_to_pay = $addons_quantities
+            ->reduce(fn ($carry, $current) => $carry + $current['quantity'] * $current['rate'],
+                $package->pivot->rate /* The initial value is the package's rate. */);
+
+        // 5. Convert the collection to array and attach to the reservation if it is not empty.
+        $addons_quantities = $addons_quantities->map(fn ($item) => [ 'quantity' => $item['quantity'] ])->toArray();
+        if ($addons_quantities != null) $reservation->addons()->attach($addons_quantities);
+        
+        // 6. Update the $resrvation row.
+        $reservation->update([
+            'no_of_people' => $no_of_people,
+            'amount_to_pay' => $amount_to_pay,
+        ]);
     }
 }

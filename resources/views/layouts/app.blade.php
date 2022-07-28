@@ -1,5 +1,3 @@
-@props(['page' => null])
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -31,9 +29,13 @@
                 {{ $slot }}
             </main>
 
-            <header>
-                I'm a footer
-            </header>
+            <footer class="text-center border-t-2 border-primary-fg text-sm mx-8 mt-4 py-4">
+                © Villa Capco 2022.<br />
+                Built using TALL stack (Tailwind CSS, Alpine JS, Laravel, Livewire).<br /><br />
+                Need help? Contact us at <span class="text-blue-500">0917 546 7499</span><br />
+                Or visit our facebook page <a class="text-blue-500" href="https://www.facebook.com/villacapco" target="_blank">https://www.facebook.com/villacapco</a><br />
+                Have a visit at our resort at <span class="text-blue-500">55 Axis Road, Kalawaan, Pasig, Philippines</span><br />
+            </footer>
         </div>
     </body>
 </html>

@@ -31,7 +31,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 1",
-            'details' => '1 pool,1 room with 2 beds,1 bathroom,1 function hall',
+            'details' => '1 pool,1 room with 2 beds,1 bathroom',
         ])->packages()->attach($packages);
 
         $packages = [
@@ -50,7 +50,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 2",
-            'details' => '1 pool,2 rooms with 2 beds each,2 bathrooms,1 function hall',
+            'details' => '1 pool,2 rooms with 2 beds each,2 bathrooms',
         ])->packages()->attach($packages);
 
         $packages = [
@@ -69,7 +69,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 3",
-            'details' => '1 pool,2 rooms with 3 beds each,3 bathrooms,1 function hall',
+            'details' => '1 pool,2 rooms with 3 beds each,3 bathrooms',
         ])->packages()->attach($packages);
 
         $packages = [
@@ -88,7 +88,7 @@ class AccommodationSeeder extends Seeder
         ];
         Accommodation::create([
             'name' => "Pool 4",
-            'details' => '1 pool,3 rooms with multiple beds each,4 bathrooms,1 function hall',
+            'details' => '1 pool,3 rooms with multiple beds each,4 bathrooms',
         ])->packages()->attach($packages);
 
         $package = [

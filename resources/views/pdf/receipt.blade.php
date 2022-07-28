@@ -70,7 +70,7 @@
     </head>
     <body class="font-sans antialiased">
         <header>
-            <img src="{{ public_path('storage/images/villa_capco_logo.jpg') }}"
+            <img src="{{ 'file:///' . public_path('storage/images/villa_capco_logo.jpg') }}"
                 alt="Villa Capco logo"
                 width="150px" height="150px"
                 style="border-radius: 100%;"/>
@@ -209,7 +209,7 @@
         </table>
 
         <div style="text-align: center;">
-            <img src="{{ $receipt['qr_code_path'] }}"
+            <img src="{{ 'file:///' . $receipt['qr_code_path'] }}"
                 alt="{{ $receipt['transaction_no'] }} qr code"
                 width="150px" height="150px"
                 style="margin: 0"/>

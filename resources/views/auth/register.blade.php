@@ -1,4 +1,4 @@
-<x-no-nav-layout>
+<x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -31,6 +31,13 @@
                 <x-label for="email" :value="__('Email')" />
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
+
+            <!-- Contact Number -->
+            <div class="mt-4">
+                <x-label for="contact_number" :value="__('Contact Number')" />
+
+                <x-input id="contact_number" class="block mt-1 w-full" type="tel" pattern="(\+63|0)9[0-9]{9}" name="contact_number" :value="old('contact_number')" required />
             </div>
 
             <!-- Password -->

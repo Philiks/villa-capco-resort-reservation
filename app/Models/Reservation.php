@@ -72,6 +72,10 @@ class Reservation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'accommodation_id',
+        'package_id',
+        'user_id',
+        'status_id',
         'no_of_people',
         'amount_to_pay',
         'mode_of_payment',

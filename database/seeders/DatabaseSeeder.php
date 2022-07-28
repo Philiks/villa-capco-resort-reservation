@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AccommodationSeeder::class,
             ImageSeeder::class,
             RatingSeeder::class,
+            StatusSeeder::class,
             ReservationSeeder::class,
         ]);
     }

@@ -30,11 +30,11 @@ class ReservationFactory extends Factory
             'accommodation_id' => $accommodation_id,
             'package_id' => $package_id,
             'user_id' => User::where('id', '!=', 1)->inRandomOrder()->pluck('id')->first(),
-            'status_id' => Status::all()->inRandomOrder()->pluck('id')->first(),
+            'status_id' => Status::inRandomOrder()->pluck('id')->first(),
             'no_of_people' => $this->faker->numberBetween(20, 30),
             'amount_to_pay' => Format::moneyForDatabase($this->faker->numberBetween(6_000, 8_000)),
             'mode_of_payment' => 'Cash',
-            'reserved_date' => $this->faker->date(),
+            'reserved_date' => $this->faker->dateTimeBetween('next week', '2022-12-31'),
         ];
     }
 }
