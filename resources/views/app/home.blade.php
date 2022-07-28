@@ -8,7 +8,7 @@
     </div>
 
     <article class="mx-20 my-5 bg-primary-bg border rounded-lg overflow-hidden">
-        <img src="{{ asset('storage/images/accommodations/pool 1.jpg') }}" alt="First Pool" class="float-left object-cover w-[33.3333vw] h-auto mr-5">
+        <img src="{{ asset('storage/images/accommodations/pool_1.jpg') }}" alt="First Pool" class="float-left object-cover w-[33.3333vw] h-auto mr-5">
         <div class="mr-5 mt-3">
             <h1 class="text-start text-2xl w-3/4 text-primary-fg font-bold pt-5">
                 The first Pool of Villa Capco
@@ -23,7 +23,7 @@
     </article>
 
     <article class="mx-20 my-10 bg-primary-bg border rounded-lg overflow-hidden">
-        <img src="{{ asset('storage/images/addons/function hall.jpg') }}" alt="Function Hall" class="float-right object-cover w-[33.3333vw] h-auto ml-5">
+        <img src="{{ asset('storage/images/addons/function_hall.jpg') }}" alt="Function Hall" class="float-right object-cover w-[33.3333vw] h-auto ml-5">
         <div class="ml-5 mt-5">
             <h1 class="text-end text-2xl w-3/4 text-primary-fg font-bold pt-5">
                 Our undying commitment

@@ -18,6 +18,14 @@ class RatingsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'comment';
 
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Toggle::make('is_featured'),
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -27,9 +35,9 @@ class RatingsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('rating_score'),
                 Tables\Columns\BooleanColumn::make('is_featured'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->date(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->date(),
             ])
             ->filters([
                 Filter::make('is_admin')->toggle(),
@@ -59,6 +67,7 @@ class RatingsRelationManager extends RelationManager
             ->headerActions([
             ])
             ->actions([
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

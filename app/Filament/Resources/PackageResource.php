@@ -15,6 +15,8 @@ class PackageResource extends Resource
 {
     protected static ?string $model = Package::class;
 
+    protected static ?string $navigationGroup = 'Reservation';
+
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
@@ -51,9 +53,9 @@ class PackageResource extends Resource
                 Tables\Columns\TextColumn::make('end_time')
                     ->time('h:i A'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->date(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->date(),
             ])
             ->filters([
                 //

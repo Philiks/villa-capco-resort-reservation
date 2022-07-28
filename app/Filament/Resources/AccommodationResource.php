@@ -15,7 +15,9 @@ class AccommodationResource extends Resource
 {
     protected static ?string $model = Accommodation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationGroup = 'Reservation';
+
+    protected static ?string $navigationIcon = 'heroicon-o-office-building';
 
     public static function form(Form $form): Form
     {
