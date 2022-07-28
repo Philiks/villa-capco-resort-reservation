@@ -3,7 +3,7 @@
         @foreach ($addons as $addon)
             <article class="bg-primary-bg border rounded-lg transition duration-700 ease-in-out hover:scale-105 overflow-hidden">
                 <div class="relative pb-2/3 rounded-lg">
-                    <img src="{{ $addon->image_path }}" alt="{{ $addon->name }}" class="absolute top-0 object-cover w-full h-full">
+                    <img src="{{ asset('storage/' . $addon->image_path) }}" alt="{{ $addon->name }}" class="absolute top-0 object-cover w-full h-full">
                 </div>
 
                 <div class="p-4">

@@ -11,7 +11,7 @@
   <div class="swiper-wrapper">
     @foreach ($images as $index => $image)
         <div class="swiper-slide">
-            <img src="{{ $image['image_path'] }}" alt="{{ $alt }}" class="object-cover w-full h-full" />
+            <img src="{{ asset('storage/' . $image['image_path']) }}" alt="{{ $alt }}" class="object-cover w-full h-full" />
         </div>
     @endforeach
   </div>
@@ -24,7 +24,6 @@
       direction: 'horizontal',
       loop: true,
       effect: 'fade',
-      grabCursor: "true",
       centeredSlides: "true",
       slidesPerView: 'auto',
 
@@ -32,10 +31,5 @@
           delay: 2500,
           disableOnInteraction: false,
       },
-
-      pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-      }
   });
 </script>

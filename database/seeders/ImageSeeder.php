@@ -16,82 +16,82 @@ class ImageSeeder extends Seeder
     {
         Image::create([
             'accommodation_id' => 1,
-            'file_path' => asset('storage/images/accommodations/pool 1.jpg')
+            'file_path' => 'images/accommodations/pool_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 1,
-            'file_path' => asset('storage/images/accommodations/pool 1 - room 1.jpg')
+            'file_path' => 'images/accommodations/pool_1_room_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 2,
-            'file_path' => asset('storage/images/accommodations/pool 2.jpg')
+            'file_path' => 'images/accommodations/pool_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 2,
-            'file_path' => asset('storage/images/accommodations/pool 2 - room 1.jpg')
+            'file_path' => 'images/accommodations/pool_2_room_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 2,
-            'file_path' => asset('storage/images/accommodations/pool 2 - room 2.jpg')
+            'file_path' => 'images/accommodations/pool_2_room_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 3,
-            'file_path' => asset('storage/images/accommodations/pool 3 1.jpg')
+            'file_path' => 'images/accommodations/pool_3_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 3,
-            'file_path' => asset('storage/images/accommodations/pool 3 2.jpg')
+            'file_path' => 'images/accommodations/pool_3_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 3,
-            'file_path' => asset('storage/images/accommodations/pool 3 - room 1.jpg')
+            'file_path' => 'images/accommodations/pool_3_room_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 3,
-            'file_path' => asset('storage/images/accommodations/pool 3 - room 2.jpg')
+            'file_path' => 'images/accommodations/pool_3_room_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 4,
-            'file_path' => asset('storage/images/accommodations/pool 4.jpg')
+            'file_path' => 'images/accommodations/pool_4.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 4,
-            'file_path' => asset('storage/images/accommodations/pool 4 - room 1.png')
+            'file_path' => 'images/accommodations/pool_4_room_1.png'
         ]);
 
         Image::create([
             'accommodation_id' => 4,
-            'file_path' => asset('storage/images/accommodations/pool 4 - room 2.jpg')
+            'file_path' => 'images/accommodations/pool_4_room_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 4,
-            'file_path' => asset('storage/images/accommodations/pool 4 - room 3.jpg')
+            'file_path' => 'images/accommodations/pool_4_room_3.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 5,
-            'file_path' => asset('storage/images/accommodations/function hall 1.jpg')
+            'file_path' => 'images/accommodations/function_hall_1.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 5,
-            'file_path' => asset('storage/images/accommodations/function hall 2.jpg')
+            'file_path' => 'images/accommodations/function_hall_2.jpg'
         ]);
 
         Image::create([
             'accommodation_id' => 5,
-            'file_path' => asset('storage/images/accommodations/function hall 3.jpg')
+            'file_path' => 'images/accommodations/function_hall_3.jpg'
         ]);
     }
 }

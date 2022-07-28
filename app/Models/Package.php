@@ -38,7 +38,9 @@ class Package extends Model
      */
     public function accommodations(): BelongsToMany
     {
-        return $this->belongsToMany(Accommodation::class);
+        return $this->belongsToMany(Accommodation::class)
+            ->withTimestamps()
+            ->withPivot(['rate', 'max_people']);
     }
 
     /**

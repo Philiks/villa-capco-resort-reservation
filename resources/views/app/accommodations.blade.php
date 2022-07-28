@@ -10,7 +10,7 @@
                             ])->toArray();
                         $alt = $accommodation->name;
                     @endphp
-                    <x-static-swiper :images="$images" :alt="$alt"
+                    <x-swiper :images="$images" :alt="$alt"
                         class="absolute top-0 object-cover w-full h-full" />
                 </div>
 

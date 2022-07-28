@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Columns\Column;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Column::configureUsing(function (Column $column): void {
+            $column
+                ->toggleable()
+                ->sortable();
+        });
+
+        BooleanColumn::configureUsing(function (Column $column): void {
+            $column->extraAttributes(['class' => 'flex justify-center']);
+        });
     }
 }
