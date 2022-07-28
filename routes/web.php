@@ -47,6 +47,10 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
+Route::get('/admin', function () {
+    return redirect('/admin/accommodations');
+});
+
 Route::middleware('auth')->group(function () {
     /*
      * Guest (customer) routes.
