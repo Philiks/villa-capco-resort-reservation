@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Events\ReservationCreated;
+use App\Events\ReservationDeleted;
+use App\Events\ReservationUpdated;
+use App\Listeners\DeleteQrCodeAndReceipt;
+use App\Listeners\GenerateQrCodeAndReceipt;
+use App\Listeners\UpdateReceipt;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,17 +23,16 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ReservationCreated::class => [
+            GenerateQrCodeAndReceipt::class,
+        ],
+        ReservationUpdated::class => [
+            UpdateReceipt::class,
+        ],
+        ReservationDeleted::class => [
+            DeleteQrCodeAndReceipt::class,
+        ],
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
 
     /**
      * Determine if events and listeners should be automatically discovered.
