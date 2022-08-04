@@ -5,6 +5,8 @@ use App\Models\Accommodation;
 use App\Models\Addon;
 use App\Models\Faq;
 use App\Models\Rating;
+use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +42,13 @@ Route::get('/faqs', function () {
 })->name('faqs');
 
 Route::get('/reservations/{accommodation_id?}/{package_id?}', function ($accommodation_id = null, $package_id = null) {
-    return view('app.reservations', ['accommodation_id' => $accommodation_id, 'package_id' => $package_id]);
+    $current_reservation = auth()->user() == null ?
+        null :
+        Reservation::where([
+            ['user_id', auth()->user()->id],
+            ['reserved_date', '>=', Carbon::now()]
+        ])->first();
+    return view('app.reservations', compact('accommodation_id', 'package_id', 'current_reservation'));
 })->name('reservations');
 
 Route::get('/', function () {

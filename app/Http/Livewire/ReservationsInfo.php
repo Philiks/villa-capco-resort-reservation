@@ -2,7 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Events\ReservationCreated;
+use App\Events\ReservationDeleted;
+use App\Events\ReservationUpdated;
 use App\Models\Accommodation;
 use App\Models\Addon;
 use App\Models\Reservation;
@@ -12,26 +13,20 @@ use Livewire\Component;
 
 class ReservationsInfo extends Component
 {
-    public $reservation = [];
-    public $package_names = [];
-    public $summary_details = []; /* including accommodation. */
-    public $selected_accommodation_id; /* for summary */
-    public $selected_package_id; /* for display of dropdown */
-    public $selected_addons = []; /* for computation */
-    public $accommodations = [];
-    public $addons = [];
-    public $no_of_people;
-    public $reserved_date;
+    public $reservation;
+    public $accommodation;
+    public $package;
+    public $addons = []; /* For computation. */
     public $total = 0;
-    public $add_person_addon_id;
-    public $function_hall_addon_id;
-    public $function_hall_accommodation_id;
+    public $disabledDates = []; /* For JS. For Rebooking. */
+    public $add_person_addon_id; /* For blade in displaying quantity. */
 
-    public $receipt_path;
-    public $disabledDates = []; /* For JS */
+    public $show_calendar = false;
+    public $show_cancel_reservation = false;
+    public $rebook_date;
 
     protected $listeners = [
-        'datePickerPicked' => 'reservedDateChanged',
+        'datePickerPicked' => 'changeRebookDate',
     ];
 
     public function render()
@@ -39,147 +34,110 @@ class ReservationsInfo extends Component
         return view('livewire.reservations-info');
     }
 
-    public function mount(?int $accommodation_id, ?int $package_id)
+    public function mount(Reservation $current_reservation)
     {
-        $this->accommodations = Accommodation::all()
+        $this->reservation = $current_reservation;
+
+        $accommodation_id = $current_reservation->accommodation_id;
+        $this->accommodation = Accommodation::find($accommodation_id);
+
+        $package_id = $current_reservation->package_id;
+        $this->package = $this->accommodation
+            ->packages()
+            ->wherePivot('package_id', $package_id)
+            ->get()
+            ->map(fn ($item) => [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'start_time' => $item['start_time'],
+                'end_time' => $item['end_time'],
+                'rate' => $item->pivot['rate'],
+                'max_people' => $item->pivot['max_people'],
+            ])
+            ->first();
+
+        $this->addons = $current_reservation
+            ->addons()
+            ->get()
             ->mapWithKeys(fn ($item) => [
                 $item['id'] => [
                     'name' => $item['name'],
-                    'details' => $item['details']
+                    'rate' => $item['rate'],
+                    'quantity' => $item->pivot['quantity']
                 ]
             ])->toArray();
 
-        $this->addons = Addon::all()
-            ->mapWithKeys(fn ($item) => [
-                $item['id'] => [
-                    'name' => $item['name'],
-                    'rate' => $item['rate']
-                ]
-            ])->toArray();
-
-        // Save in cache to prevent querying everytime
-        // accommodation - function hall is selected
-        $this->function_hall_addon_id = Addon::where(
-            'name', 'Function Hall (if you rent Pools 1-4)'
-        )->first()->id;
-        $this->function_hall_accommodation_id = Accommodation::where(
-            'name', 'Function Hall'
-        )->first()->id;
-        // Reference for the multiple quantities addon.
         $this->add_person_addon_id = Addon::where(
             'name', 'Additional Person'
         )->first()->id;
 
-        // Check if called through the `/accommodations`
-        if ($accommodation_id != null)
-            $this->queryPackages($accommodation_id);
-
-        if ($package_id != null)
-            $this->showSummary($package_id);
+        $this->computeTotal();
+        $this->collectReservedDates();
     }
 
-    public function queryPackages(int $accommodation_id)
-    {
-        $this->package_names = Accommodation::find($accommodation_id)
-            ->packages()->pluck('name', 'id');
-        $this->selected_accommodation_id = $accommodation_id;
-        $this->selected_package_id =  null;
-        $this->summary_details =  null;
+    public function cancelRebook() {
+        $this->show_calendar = false;
+    }
 
-        if ($accommodation_id == $this->function_hall_accommodation_id)
-            unset($this->addons[$this->function_hall_addon_id]);
-        else if (!array_key_exists($this->function_hall_addon_id, $this->addons))  {
-            $addon = Addon::find($this->function_hall_addon_id)->first();
-            $this->addons[$this->function_hall_addon_id] = [
-                'name' => $addon['name'],
-                'rate' => $addon['rate']
-            ];
+    public function changeRebookDate($rebook_date) {
+        $this->rebook_date = $rebook_date;
+    }
+
+    public function rebook()
+    {
+        if ($this->show_calendar == false) {
+            $this->show_calendar = true;
+            $this->dispatchBrowserEvent('calendar-visible');
+            return;
         }
+
+        $this->reservation->update([
+            'reserved_date' => Carbon::parse($this->rebook_date),
+            'status_id' => Status::where('name', 'Rebooked')->pluck('id')->first()
+        ]);
+        event(new ReservationUpdated($this->reservation));
+        $this->dispatchBrowserEvent('reservation-updated');
     }
 
-    public function showSummary(int $package_id)
+    public function hideCancelReservation() {
+        $this->show_cancel_reservation = false;
+    }
+
+    public function cancelReservation()
     {
-        $package = Accommodation::find($this->selected_accommodation_id)
-            ->packages()->wherePivot('package_id', $package_id)->first();
-        $this->selected_package_id = $package_id;
+        if ($this->show_cancel_reservation == false) {
+            $this->show_cancel_reservation = true;
+            return;
+        }
+        
+        $this->reservation->update([
+            'reserved_date' => null,
+            'status_id' => Status::where('name', 'Cancelled')->pluck('id')->first()
+        ]);
+        event(new ReservationDeleted($this->reservation));
+    }
 
-        $this->summary_details = [
-            'accommodation' => $this->accommodations[$this->selected_accommodation_id]['name'],
-            'details' => $this->accommodations[$this->selected_accommodation_id]['details'],
-            'package' => $package->name,
-            'schedule' => date('h:i A', strtotime($package->start_time)) . ' - ' . date('h:i A', strtotime($package->end_time)),
-            'rate' => $package->pivot->rate,
-            'max_people' => $package->pivot->max_people,
-        ];
+    private function computeTotal()
+    {
+        $this->total = $this->package['rate'];
+        // TODO: Add condition for id if add_person_addon_id then create global var for excess_people
+        /**
+         * The $this->addons here does not have to be attached to reservation since
+         * the data are static and only needed to be displayed.
+         */
+        foreach ($this->addons as $addon)
+            $this->total += $addon['quantity'] * $addon['rate'];
+    }
 
+    private function collectReservedDates()
+    {
         $this->disabledDates = Reservation::where([
-                ['package_id', $package_id],
-                ['accommodation_id', $this->selected_accommodation_id],
+                ['package_id', $this->package['id']],
+                ['accommodation_id', $this->accommodation->id],
                 ['reserved_date', '>', Carbon::now()->addWeek()->toDateString()],
             ])
             ->pluck('reserved_date')
             ->map(fn ($item) => $item->format('m/d/Y'))
             ->toArray();
-
-        $this->computeTotal();
-    }
-
-    public function addAddon($addon_id, $is_checked) {
-        $this->selected_addons[$addon_id] = [
-            'quantity' => $is_checked ? 1 : 0
-        ];
-
-        $this->computeTotal();
-    }
-
-    public function numberOfPeopleChanged($no_of_people)
-    {
-        $this->no_of_people = $no_of_people;
-        if ($no_of_people > $this->summary_details['max_people'])
-            $this->selected_addons[$this->add_person_addon_id] = [
-                'quantity' => $no_of_people - $this->summary_details['max_people']
-            ];
-        else
-            $this->selected_addons[$this->add_person_addon_id]['quantity'] = 0;
-        
-        $this->computeTotal();
-    }
-
-    public function reservedDateChanged($reserved_date)
-    {
-        $this->reserved_date = $reserved_date;
-    }
-
-    public function reserve()
-    {
-        $reservation = Reservation::create([
-            'accommodation_id' => $this->selected_accommodation_id,
-            'package_id' => $this->selected_package_id,
-            'user_id' => auth()->user()->id,
-            'status_id' => Status::where('name', 'Booked')->first()->id,
-            'no_of_people' => $this->no_of_people,
-            'amount_to_pay' => $this->total,
-            'mode_of_payment' => "Cash",
-            'reserved_date' => Carbon::parse($this->reserved_date),
-        ]);
-        $reservation->addons()->attach($this->selected_addons);
-        $qr_code_path = Reservation::getQrCodeFilepathFor($reservation->transaction_no);
-        $receipt_path = Reservation::getReceiptFilepathFor($reservation->transaction_no);
-        $reservation->update([
-            'qr_code_path' => $qr_code_path,
-            'receipt_path' => $receipt_path,
-        ]);
-        $this->receipt_path = asset('storage/' . $receipt_path);
-
-        event(new ReservationCreated($reservation));
-
-        $this->dispatchBrowserEvent('reservation-created', ['accommodation' => $this->summary_details['accommodation']]);
-    }
-
-    private function computeTotal()
-    {
-        $this->total = $this->summary_details['rate'];
-        foreach ($this->selected_addons as $id=>$addon)
-            $this->total += $addon['quantity'] * $this->addons[$id]['rate'];
     }
 }

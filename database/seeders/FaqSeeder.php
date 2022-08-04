@@ -43,5 +43,10 @@ class FaqSeeder extends Seeder
             'question' => "Can I rent the function hall only?",
             'answer' => "Yes, function hall can be reserved without the other facilities such as the pools.",
         ]);
+
+        Faq::create([
+            'question' => "Can I cancel my reservation?",
+            'answer' => "Yes, as long as the cancellation date is 2 weeks ahead of reservation date.",
+        ]);
     }
 }

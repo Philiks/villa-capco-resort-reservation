@@ -27,7 +27,9 @@ return new class extends Migration
             $table->integer('amount_to_pay')
                   ->comment('Divide by 100 to get the exact amount in decimal value.');
             $table->string('mode_of_payment');
-            $table->datetime('reserved_date');
+            $table->datetime('reserved_date')
+                  ->nullable()
+                  ->comment('Null reserved_date means the status_id is \'Cancelled\'.');
             $table->string('qr_code_path')
                   ->nullable()
                   ->comment('Qr Code will be made after the transaction_no has been created.');
