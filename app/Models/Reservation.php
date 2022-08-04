@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -159,5 +160,14 @@ class Reservation extends Model
      */
     public static function getReceiptFilepathFor(string $transaction_no): string {
         return Reservation::RECEIPT_PATH . $transaction_no . '.pdf';
+    }
+
+    /**
+     * Reservation cancellation must be 2 weeks prior the reservation date.
+     * 
+     * @return bool whether the `reserved_date` meets the policy for cancellation.
+     */
+    public function isCancelable(): bool {
+        return $this->reserved_date > Carbon::parse('+2 weeks');
     }
 }

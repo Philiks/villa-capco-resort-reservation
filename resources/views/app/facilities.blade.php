@@ -8,7 +8,7 @@
 
                 <div class="p-4">
                     <x-card-title :value="$addon->name" class="text-xl"/>
-                    <x-price :value="$addon->rate" />
+                    <x-price :value="$addon->rate" class="italic" />
                     <x-card-description :value="$addon->description" />
                 </div>
             </article>
